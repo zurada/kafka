@@ -1,0 +1,40 @@
+spring.profiles.active: dev
+spring.cloud.stream:
+  bindings:
+    process-out-0:
+      destination: demoOutput
+    process-in-0:
+      destination: demoInput
+  kafka.streams:
+    binder:
+      brokers: localhost:29092, localhost:29093, localhost:29094
+      configuration:
+        processing.guarantee: exactly_once
+        isolation.level: read_committed
+        commit.interval.ms: '1000'
+        application.id: demo
+        #transactional.id: demo-tx
+        #retries: 5
+        default:
+          key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+          value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+      consumer-properties:
+        auto.offset.reset: latest
+        allow.auto.create.topics: 'false'
+      producer-properties:
+        acks: 'all'
+        #enable.idempotence: 'true'
+      serdeError: sendToDlq
+      autoCreateTopics: 'false'
+      autoAddPartitions: 'false'
+    bindings:
+      process-in-0:
+        consumer:
+          dlqName: demoDlq
+          enable-dlq: true
+          useNativeDecoding: 'false'
+// health binding todo!!
+management:
+  health:
+    binders:
+      enabled: true

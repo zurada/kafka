@@ -1,0 +1,4 @@
+server.port: ${random.int(10000,10099)}
+logging.level:
+  root: INFO
+  com.example.kafkastreamsdemoconfig: DEBUG

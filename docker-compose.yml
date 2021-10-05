@@ -7,7 +7,9 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     ports:
       - 22181:2181
-
+    volumes:
+      - /tmp/kafka/zookeeper/data:/var/lib/zookeeper/data
+      - /tmp/kafka/zookeeper/log:/var/lib/zookeeper/log
   kafka1:
     image: confluentinc/cp-kafka:latest
     depends_on:
@@ -16,4 +18,25 @@ services:
       - 29092:29092
     env_file:
       - kafka1.env
-
+    volumes:
+      - /tmp/kafka/broker1/data:/var/lib/kafka/data
+  kafka2:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper1
+    ports:
+      - 29093:29093
+    env_file:
+      - kafka2.env
+    volumes:
+      - /tmp/kafka/broker2/data:/var/lib/kafka/data
+  kafka3:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper1
+    ports:
+      - 29094:29094
+    env_file:
+      - kafka3.env
+    volumes:
+      - /tmp/kafka/broker3/data:/var/lib/kafka/data
